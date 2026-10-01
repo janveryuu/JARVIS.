@@ -40,7 +40,6 @@ const CONTEXT_FILES_SOURCE_DIR = path.join(
   'context-manager',
   'context-files'
 )
-const CONTEXT_MANAGER_DIR = path.dirname(fileURLToPath(import.meta.url))
 const CODEBASE_CONTEXT_FILES = new Set([
   'LEON.md',
   'ARCHITECTURE.md'

@@ -177,7 +177,9 @@ export default class Client {
     if (this._webSpeechRecognition) {
       try {
         this._webSpeechRecognition.abort()
-      } catch {}
+      } catch {
+        // Abort may throw if recognition has already stopped
+      }
     }
 
     const recognition = new SpeechRecognition()
@@ -805,7 +807,9 @@ export default class Client {
     if (this._webSpeechRecognition) {
       try {
         this._webSpeechRecognition.abort()
-      } catch {}
+      } catch {
+        // Abort may throw if recognition has already stopped
+      }
       this._webSpeechRecognition = null
     }
 

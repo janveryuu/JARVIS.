@@ -22,7 +22,7 @@ llm:
   # default: llamacpp/Qwen3.8-27B-Uncensored-Aggressive-Q4_K_M.gguf
   # default: sglang/Qwen3.8-27B-Uncensored-Aggressive-Q4_K_M.gguf
   # default: /absolute/path/model.gguf
-  default: null
+  default: google/gemini-2.5-flash
   # Optional per-mode overrides. Null values fall back to llm.default.
   workflow: null
   agent: null

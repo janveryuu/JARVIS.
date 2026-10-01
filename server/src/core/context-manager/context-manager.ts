@@ -61,11 +61,19 @@ const BOOT_REFRESH_TIMER_LABEL = 'Context files boot refresh total'
 const PERIODIC_REFRESH_TIMER_LABEL = 'Context files periodic refresh total'
 const READ_REFRESH_TIMER_LABEL = 'Context files read refresh total'
 const CONTEXT_REFRESH_WORKER_SRC_PATH = path.join(
-  CONTEXT_MANAGER_DIR,
+  CODEBASE_PATH,
+  'server',
+  'src',
+  'core',
+  'context-manager',
   'context-refresh-worker.ts'
 )
 const CONTEXT_REFRESH_WORKER_DIST_PATH = path.join(
-  CONTEXT_MANAGER_DIR,
+  CODEBASE_PATH,
+  'server',
+  'dist',
+  'core',
+  'context-manager',
   'context-refresh-worker.js'
 )
 const CONTEXT_REFRESH_WORKER_MAX_BUFFER = 1024 * 1024 * 8

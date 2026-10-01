@@ -150,17 +150,95 @@ export default class Client {
   }
 
   asrStartRecording() {
-    if (!window.leonConfigInfo.asr.enabled) {
+    if (this._isVoiceModeEnabled) {
+      this.disableVoiceMode()
+      return
+    }
+
+    if (window.leonConfigInfo?.asr?.enabled) {
+      this.enableVoiceMode()
+      this.voiceEnergy.status = 'listening'
+      this.socket.emit('asr-start-record')
+      return
+    }
+
+    this.startWebSpeechRecognition()
+  }
+
+  startWebSpeechRecognition() {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition
+
+    if (!SpeechRecognition) {
       alert(ASR_DISABLED_MESSAGE)
       return
     }
 
-    if (!this._isVoiceModeEnabled) {
+    if (this._webSpeechRecognition) {
+      try {
+        this._webSpeechRecognition.abort()
+      } catch {}
+    }
+
+    const recognition = new SpeechRecognition()
+    this._webSpeechRecognition = recognition
+    recognition.continuous = false
+    recognition.interimResults = true
+    recognition.lang = 'en-US'
+
+    recognition.onstart = () => {
       this.enableVoiceMode()
-
       this.voiceEnergy.status = 'listening'
+      if (this.voiceSpeechElement) {
+        this.voiceSpeechElement.textContent = 'Listening...'
+      }
+    }
 
-      this.socket.emit('asr-start-record')
+    recognition.onresult = (event) => {
+      let interimTranscript = ''
+      let finalTranscript = ''
+
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript
+        } else {
+          interimTranscript += event.results[i][0].transcript
+        }
+      }
+
+      const currentText = finalTranscript || interimTranscript
+      if (currentText) {
+        this._input.value = currentText
+        if (this.voiceSpeechElement) {
+          this.voiceSpeechElement.textContent = currentText
+        }
+      }
+
+      if (finalTranscript) {
+        this.voiceEnergy.status = 'processing'
+        setTimeout(() => {
+          this.send('utterance')
+        }, 300)
+      }
+    }
+
+    recognition.onerror = (event) => {
+      console.warn('Speech recognition status:', event.error)
+      if (event.error !== 'no-speech') {
+        this.voiceEnergy.status = 'idle'
+      }
+    }
+
+    recognition.onend = () => {
+      if (this._isVoiceModeEnabled && this.voiceEnergy.status === 'listening') {
+        this.voiceEnergy.status = 'idle'
+      }
+    }
+
+    try {
+      recognition.start()
+    } catch (e) {
+      console.error('Failed to start SpeechRecognition:', e)
     }
   }
 
@@ -358,6 +436,40 @@ export default class Client {
       }
 
       this.chatbot.scrollDown({ force: true })
+
+      if (
+        this._isVoiceModeEnabled &&
+        typeof window !== 'undefined' &&
+        'speechSynthesis' in window &&
+        answerText
+      ) {
+        this.voiceEnergy.status = 'talking'
+        const cleanSpeech = (data && typeof data === 'object' && data.speech)
+          ? data.speech
+          : String(answerText)
+              .replace(/\[FILE_PATH\][\s\S]*?\[\/FILE_PATH\]/g, '')
+              .replace(/```[\s\S]*?```/g, '')
+              .replace(/[#*`_~]/g, '')
+              .trim()
+
+        if (cleanSpeech) {
+          const utterance = new SpeechSynthesisUtterance(cleanSpeech)
+          utterance.rate = 1.0
+          utterance.onend = () => {
+            if (this._isVoiceModeEnabled) {
+              this.voiceEnergy.status = 'listening'
+              this.startWebSpeechRecognition()
+            }
+          }
+          utterance.onerror = () => {
+            if (this._isVoiceModeEnabled) {
+              this.voiceEnergy.status = 'idle'
+            }
+          }
+          window.speechSynthesis.cancel()
+          window.speechSynthesis.speak(utterance)
+        }
+      }
 
       // Independent status notices must not consume an in-flight answer.
       if (streamGenerationId) {
@@ -690,6 +802,17 @@ export default class Client {
     }
   }
   disableVoiceMode() {
+    if (this._webSpeechRecognition) {
+      try {
+        this._webSpeechRecognition.abort()
+      } catch {}
+      this._webSpeechRecognition = null
+    }
+
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel()
+    }
+
     if (this._isVoiceModeEnabled) {
       this._isVoiceModeEnabled = false
 

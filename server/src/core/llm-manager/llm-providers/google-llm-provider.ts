@@ -9,7 +9,16 @@ export default class GoogleLLMProvider extends AISDKRemoteLLMProvider {
       apiKeyEnv: 'GEMINI_API_KEY',
       model: target.model,
       baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
-      flavor: 'openai-compatible'
+      flavor: 'openai-compatible',
+      buildProviderOptions: ({ completionParams, reasoningMode }) => {
+        return {
+          openaiCompatible: {
+            ...(reasoningMode && reasoningMode !== 'off' && completionParams.disableThinking !== true
+              ? { reasoningEffort: completionParams.reasoningEffort || 'medium' }
+              : {})
+          }
+        }
+      }
     })
   }
 }

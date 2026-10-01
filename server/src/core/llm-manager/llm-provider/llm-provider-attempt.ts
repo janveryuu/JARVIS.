@@ -521,6 +521,7 @@ export async function runCompletionAttempt(
       finishReason = normalized.finishReason
     } else if (
       [
+        LLMProviders.Google,
         LLMProviders.Groq,
         LLMProviders.LlamaCPP,
         LLMProviders.SGLang,

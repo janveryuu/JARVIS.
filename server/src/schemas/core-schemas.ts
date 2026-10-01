@@ -103,7 +103,8 @@ export const configSchemaObject = strictObject({
       huggingface: llmProvider,
       cerebras: llmProvider,
       groq: llmProvider,
-      celeris: llmProviderWithBaseURL
+      celeris: llmProviderWithBaseURL,
+      google: llmProviderWithBaseURL
     })
   }),
   mood: strictObject({

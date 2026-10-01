@@ -14,7 +14,7 @@ export function FinalAnswer({
   children
 }: FinalAnswerProps) {
   return (
-    <section className="final-answer" aria-label="Leon’s final answer">
+    <section className="final-answer" aria-label="JARVIS’s final answer">
       <StreamingText
         animationId={animationId}
         startDelay={FINAL_ANSWER_ANIMATION_DELAY}

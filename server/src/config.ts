@@ -162,6 +162,12 @@ const DEFAULT_CONFIG: LeonConfig = {
         api_key: {
           env: 'LEON_CELERIS_API_KEY'
         }
+      },
+      google: {
+        base_url: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+        api_key: {
+          env: 'GEMINI_API_KEY'
+        }
       }
     }
   }

@@ -215,7 +215,7 @@ export function QueryInput({
         className={clsx('query-input', {
           'query-input-expanded': isExpanded
         })}
-        aria-label="Send a message to Leon"
+        aria-label="Send a message to JARVIS"
         style={formHeight === undefined ? undefined : {
           height: `${formHeight}px`
         }}
@@ -234,7 +234,7 @@ export function QueryInput({
           />
         </div>
         <Input
-          ariaLabel="Message Leon"
+          ariaLabel="Message JARVIS"
           className={clsx('query-input-field', {
             'query-input-field-scrollable': isScrollable
           })}

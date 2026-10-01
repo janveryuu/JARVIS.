@@ -57,7 +57,7 @@ export function ThinkingMessage({
         active={isActive}
         activeLabel="Thinking..."
         animateWhileActive
-        ariaLabel="Leon’s thinking"
+        ariaLabel="JARVIS’s thinking"
         completedLabel={`Thought for ${formatDuration(durationMs)}`}
         indicator={<ThoughtIcon />}
       >

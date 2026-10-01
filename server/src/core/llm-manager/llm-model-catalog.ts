@@ -2,6 +2,7 @@ import { LLMProviders, type LLMReasoningEffort } from '@/core/llm-manager/types'
 
 // Keep setup choices stable when providers or models are added to the catalog.
 const SETUP_PROVIDER_ORDER = [
+  LLMProviders.Google,
   LLMProviders.OpenAI,
   LLMProviders.Anthropic,
   LLMProviders.OpenRouter,
@@ -152,6 +153,16 @@ const ROUTABLE_SPEED = [
  * setup and command autocomplete remain deterministic and work offline.
  */
 export const LLM_MODEL_CATALOG: readonly LLMModelCatalogEntry[] = [
+  /**
+   * Google Gemini models (Primary intelligence for JARVIS)
+   * @see https://ai.google.dev/gemini-api/docs/models/gemini
+   */
+  { provider: LLMProviders.Google, model: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', recommended: true, reasoning: GEMINI_38_REASONING, speed: ROUTABLE_SPEED, inputMediaTypes: MULTIMODAL_INPUTS },
+  { provider: LLMProviders.Google, model: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro', recommended: true, reasoning: GEMINI_38_REASONING, speed: ROUTABLE_SPEED, inputMediaTypes: MULTIMODAL_INPUTS },
+  { provider: LLMProviders.Google, model: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash', reasoning: AUTO_REASONING, speed: ROUTABLE_SPEED, inputMediaTypes: MULTIMODAL_INPUTS },
+  { provider: LLMProviders.Google, model: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro', reasoning: AUTO_REASONING, speed: ROUTABLE_SPEED, inputMediaTypes: MULTIMODAL_INPUTS },
+  { provider: LLMProviders.Google, model: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash', reasoning: AUTO_REASONING, speed: ROUTABLE_SPEED, inputMediaTypes: MULTIMODAL_INPUTS },
+
   /**
    * @see https://api-docs.deepseek.com/quick_start/pricing/
    * @see https://api-docs.deepseek.com/guides/thinking_mode/

@@ -39,7 +39,7 @@ function ExecutionActivity({ activity }: ExecutionActivityProps) {
         <ProcessGroup
           active={planIsActive}
           activeLabel="Executing plan..."
-          ariaLabel="Leon’s execution plan"
+          ariaLabel="JARVIS’s execution plan"
           completedLabel="Completed plan"
           indicator={<i className="ri-map-2-line" aria-hidden="true" />}
         >
@@ -61,7 +61,7 @@ function ExecutionActivity({ activity }: ExecutionActivityProps) {
       <ProcessGroup
         active={toolsAreActive}
         activeLabel="Using tools..."
-        ariaLabel="Leon’s tool usage"
+        ariaLabel="JARVIS’s tool usage"
         completedLabel={`Used ${toolCount} ${
           toolCount === 1 ? 'tool' : 'tools'
         }`}
